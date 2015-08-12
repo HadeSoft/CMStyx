@@ -1,0 +1,14 @@
+{
+    "websiteName": "WEBNAME",
+    "loginAdress": "/admin",
+    "adminPassword": "password",
+    "defaultDatabase": {
+        "key": "apikey",
+        "location": "dbLocation",
+        "type": "orchestrate",
+        "dependencies": [
+            "orchestrate"
+        ]
+    },
+    "customDatabase": 0
+}

@@ -1,0 +1,32 @@
+{
+    "name": "cmstyx",
+    "version": "0.1.0",
+    "devVersion": "BIV",
+    "description": "Lite Content Management System",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/VariousMilkshakes/cmstyx.git"
+    },
+    "keywords": [
+
+    ],
+    "dependencies": {
+        "q": "1.4.1",
+        "orchestrate": "0.4.6",
+        "body-parser": "1.13.3",
+        "formidable": "1.0.17",
+        "quickthumb": "0.0.11",
+        "fs-extra": "0.23.1",
+        "bcrypt": "0.8.4"
+    },
+    "author": "VariousMilkshakes <vm@hadesoft.io> (http://www.hadesoft.io)",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/VariousMilkshakes/NYXml/issues"
+    },
+    "homepage": "https://github.com/VariousMilkshakes/NYXml"
+}
