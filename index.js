@@ -23,7 +23,9 @@ exports.build = function (app, options) {
     if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
         var setup = require('./lib/setup/establish.js');
         // setup.initial();
-        res.render(page + 'wake');
+        app.get('/', function (req, res){
+            res.render(page + 'wake');
+        })
 
         app.post(conf.loginAdress + '/setup', function (req, res){
             conf.websiteName = req.body.title;
