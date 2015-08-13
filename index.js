@@ -15,6 +15,8 @@ var pages = path.join(__dirname, 'views/');
 var db = dbConnection(conf.defaultDatabase.key);
 
 exports.build = function (app, options) {
+    pm.connectTo();
+    
     app.use(bodyParser.urlencoded({
         extended: false
     }));
@@ -26,7 +28,6 @@ exports.build = function (app, options) {
     }
     
     router(app);
-    pm.connectTo();
 }
 
 exports.render = function (page, req, res, opt) {
