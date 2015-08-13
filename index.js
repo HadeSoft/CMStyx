@@ -24,7 +24,7 @@ exports.build = function (app, options) {
         var setup = require('./lib/setup/establish.js');
         // setup.initial();
         app.get('/', function (req, res){
-            res.render(page + 'wake');
+            res.render(pages + 'wake');
         })
 
         app.post(conf.loginAdress + '/setup', function (req, res){
