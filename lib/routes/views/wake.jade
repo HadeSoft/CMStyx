@@ -1,0 +1,13 @@
+form(method='post' action='admin/setup')
+	h4 '*' choices are non optional
+	h3 Website Title
+	input(type='text' name='title')
+	h3 Control Root (Default = /admin)
+	input(type='text' name='root')
+	h3 *Admin Password
+	input(type='password' name='password')
+	h2 Database Info
+	h3 *API Key
+	input(type='text' name='apiKey')
+	h3 *Data Center Location
+	input(type='text' name='location')

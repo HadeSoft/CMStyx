@@ -1,6 +1,7 @@
 var q = require('q');
 var path = require('path');
 var bodyParser = require('body-parser');
+var bcrypt = require('bcrypt');
 // var session = require('express-session');
 // var passport = require('passport');
 var dbConnection = require('orchestrate');
@@ -15,19 +16,35 @@ var pages = path.join(__dirname, 'views/');
 var db = dbConnection(conf.defaultDatabase.key);
 
 exports.build = function (app, options) {
-    pm.connectTo();
-    
     app.use(bodyParser.urlencoded({
         extended: false
     }));
 
-    if (conf.adminPassword == "password") {
+    if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
         var setup = require('./lib/setup/establish.js');
-        setup.initial();
+        // setup.initial();
+        res.render(page + 'wake');
+
+        app.post(conf.loginAdress + '/setup', function (req, res){
+            conf.websiteName = req.body.title;
+            conf.loginAdress = req.body.root;
+            bcrypt.genSalt(13, function (err, salt){
+                bcrypt.hash(req.body.password, salt, function (err, hash){
+                    conf.adminPassword = hash;
+                    setup.save(conf);
+                });
+            });
+            conf.defaultDatabase.key = req.body.apiKey;
+            conf.defaultDatabase.location = req.body.location;
+
+            setup.save(conf);
+        });
+
         return false;
+    } else {
+        pm.connectTo();
+        router(app);
     }
-    
-    router(app);
 }
 
 exports.render = function (page, req, res, opt) {

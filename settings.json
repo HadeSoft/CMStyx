@@ -1,10 +1,10 @@
 {
-    "websiteName": "WEBNAME",
+    "websiteName": "WEBSITE1",
     "loginAdress": "/admin",
-    "adminPassword": "password",
+    "adminPassword": "CHANGEME",
     "defaultDatabase": {
-        "key": "apikey",
-        "location": "dbLocation",
+        "key": "CHANGEME",
+        "location": "CHANGEME",
         "type": "orchestrate",
         "dependencies": [
             "orchestrate"
