@@ -31,7 +31,7 @@ exports.build = function (app, options) {
 }
 
 exports.render = function (page, req, res, opt) {
-    GrabCmsElements()
+    pm.getCMSElements()
     .then(function (data){
         console.log('STYX DATA : ')
         var elements = Object.getOwnPropertyNames(data);
