@@ -1,7 +1,7 @@
 {
     "name": "cmstyx",
-    "version": "0.2.4",
-    "devVersion": "BXII",
+    "version": "0.2.5",
+    "devVersion": "BXIII",
     "description": "Barebones Content Management System",
     "main": "index.js",
     "scripts": {
