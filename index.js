@@ -11,7 +11,7 @@ var conf = require('./settings.json');
 var router  = require('./lib/routes/router.js');
 var pm = require('./lib/data-handlers/post-master.js');
 // var pp = require('./lib/passport/passportControls.js');
-var pages = path.join(__dirname, 'views/');
+var pages = path.join(__dirname, 'lib/routes/views/');
 
 var db = dbConnection(conf.defaultDatabase.key);
 
