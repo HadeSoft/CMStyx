@@ -23,11 +23,10 @@ exports.build = function (app, options) {
         var setup = require('./lib/setup/establish.js');
         setup.initial();
         return false;
-    } else {
-        // SetupCMS(app);
-        router(app);
-        pm.connectTo();
     }
+    
+    router(app);
+    pm.connectTo();
 }
 
 exports.render = function (page, req, res, opt) {
