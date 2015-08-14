@@ -28,21 +28,25 @@ exports.build = function (app, options) {
         })
 
         app.post(conf.loginAdress + '/setup', function (req, res){
-            conf.websiteName = req.body.title;
-            conf.loginAdress = req.body.root;
-            bcrypt.genSalt(13, function (err, salt){
-                bcrypt.hash(req.body.password, salt, function (err, hash){
-                    conf.adminPassword = hash;
-                    setup.save(conf);
+            var fallback = "CHANGEME";
+
+            conf.websiteName = req.body.title || conf.websiteName;
+            conf.loginAdress = req.body.root || conf.loginAdress;
+            var password = req.body.password || fallback;
+            if (password != fallback) {
+                bcrypt.genSalt(13, function (err, salt){
+                    bcrypt.hash(password, salt, function (err, hash){
+                        conf.adminPassword = hash;
+                        setup.save(conf);
+                    });
                 });
-            });
-            conf.defaultDatabase.key = req.body.apiKey;
-            conf.defaultDatabase.location = req.body.location;
+            }
+            conf.defaultDatabase.key = req.body.apiKey || fallback;
+            conf.defaultDatabase.location = req.body.location || fallback;
 
             setup.save(conf);
+            
         });
-
-        return false;
     } else {
         pm.connectTo();
         router(app);
