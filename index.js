@@ -20,6 +20,8 @@ exports.build = function (app, options) {
         extended: false
     }));
 
+    console.log(conf);
+
     if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
         var setup = require('./lib/setup/establish.js');
         // setup.initial();
@@ -48,8 +50,11 @@ exports.build = function (app, options) {
             
         });
     } else {
-        pm.connectTo();
-        router(app);
+        pm.connectTo()
+        .then(function (res){
+            console.log(res);
+            router(app);
+        });
     }
 }
 
