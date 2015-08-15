@@ -14,6 +14,7 @@ var pm = require('./lib/data-handlers/post-master.js');
 var pages = path.join(__dirname, 'lib/routes/views/');
 
 var db = dbConnection(conf.defaultDatabase.key);
+var handler = {};
 
 exports.build = function (app, options) {
     app.use(bodyParser.urlencoded({
@@ -52,14 +53,14 @@ exports.build = function (app, options) {
     } else {
         pm.connectTo()
         .then(function (res){
-            console.log(res);
+            handler = res;
             router(app);
         });
     }
 }
 
 exports.render = function (page, req, res, opt) {
-    pm.getCMSElements()
+    pm.getCMSElements(handler)
     .then(function (data){
         console.log('STYX DATA : ')
         var elements = Object.getOwnPropertyNames(data);
