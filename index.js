@@ -8,6 +8,7 @@ var dbConnection = require('orchestrate');
 dbConnection.ApiEndPoint = "api.ctl-gb3-a.orchestrate.io";
 
 var conf = require('./settings.json');
+var info = require('./package.json');
 var router  = require('./lib/routes/router.js');
 var pm = require('./lib/data-handlers/post-master.js');
 // var pp = require('./lib/passport/passportControls.js');
@@ -17,11 +18,10 @@ var db = dbConnection(conf.defaultDatabase.key);
 var handler = {};
 
 exports.build = function (app, options) {
+    console.log("Running CMSTYX " + info.devVersion);
     app.use(bodyParser.urlencoded({
         extended: false
     }));
-
-    console.log(conf);
 
     if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
         var setup = require('./lib/setup/establish.js');
@@ -48,7 +48,7 @@ exports.build = function (app, options) {
             conf.defaultDatabase.location = req.body.location || fallback;
 
             setup.save(conf);
-            
+
         });
     } else {
         pm.connectTo()
@@ -62,15 +62,12 @@ exports.build = function (app, options) {
 exports.render = function (page, req, res, opt) {
     pm.getCMSElements(handler)
     .then(function (data){
-        console.log('STYX DATA : ')
+        console.log('STYX DATA : ');
         var elements = Object.getOwnPropertyNames(data);
         for (each in elements) {
             var element = elements[each];
-            // console.log(element);
             opt['stx_' + element] = data[element];
         }
-
-        console.log(opt);
         res.render(page, opt);
     })
     .fail(function (err){
