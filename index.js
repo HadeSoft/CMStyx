@@ -9,7 +9,7 @@ dbConnection.ApiEndPoint = "api.ctl-gb3-a.orchestrate.io";
 
 var conf = require('./settings.json');
 var info = require('./package.json');
-var router  = require('./lib/routes/router.js');
+var router;
 var pm = require('./lib/data-handlers/post-master.js');
 // var pp = require('./lib/passport/passportControls.js');
 var pages = path.join(__dirname, 'lib/routes/views/');
@@ -17,17 +17,24 @@ var pages = path.join(__dirname, 'lib/routes/views/');
 var db = dbConnection(conf.defaultDatabase.key);
 var handler = {};
 
+exports.rootAddress = conf.loginAdress;
+
 exports.build = function (app, options) {
+    var defer = q.defer();
     console.log("Running CMSTYX " + info.devVersion);
+    app.use(bodyParser.urlencoded({
+        extended: false
+    }));
 
     if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
+        router = require('express').Router();
         var setup = require('./lib/setup/establish.js');
         // setup.initial();
-        app.get('/', function (req, res){
+        router.get('/', function (req, res){
             res.render(pages + 'wake');
         })
 
-        app.post(conf.loginAdress + '/setup', function (req, res){
+        router.post(conf.loginAdress + '/setup', function (req, res){
             var fallback = "CHANGEME";
 
             conf.websiteName = req.body.title || conf.websiteName;
@@ -45,20 +52,20 @@ exports.build = function (app, options) {
             conf.defaultDatabase.location = req.body.location || fallback;
 
             setup.save(conf);
-
         });
+
+        defer.resolve(router);
     } else {
         pm.connectTo()
         .then(function (res){
             console.log("CMSTYX ACTION : Running");
             handler = res;
-            router(app);
+            router = require('./lib/routes/router.js');
+            defer.resolve(router);
         });
     }
 
-    app.use(bodyParser.urlencoded({
-        extended: true
-    }));
+    return defer.promise;
 }
 
 exports.render = function (page, req, res, opt) {
