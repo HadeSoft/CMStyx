@@ -19,9 +19,6 @@ var handler = {};
 
 exports.build = function (app, options) {
     console.log("Running CMSTYX " + info.devVersion);
-    app.use(bodyParser.urlencoded({
-        extended: false
-    }));
 
     if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
         var setup = require('./lib/setup/establish.js');
@@ -53,10 +50,15 @@ exports.build = function (app, options) {
     } else {
         pm.connectTo()
         .then(function (res){
+            console.log("CMSTYX ACTION : Running");
             handler = res;
             router(app);
         });
     }
+
+    app.use(bodyParser.urlencoded({
+        extended: true
+    }));
 }
 
 exports.render = function (page, req, res, opt) {
