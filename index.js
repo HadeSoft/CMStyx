@@ -77,7 +77,6 @@ exports.render = function (page, req, res, opt) {
     } else {
         pm.getCMSElements(handler)
         .then(function (data){
-            console.log('STYX DATA : ');
             var elements = Object.getOwnPropertyNames(data);
             for (each in elements) {
                 var element = elements[each];
