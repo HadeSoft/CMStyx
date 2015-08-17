@@ -10,14 +10,15 @@ dbConnection.ApiEndPoint = "api.ctl-gb3-a.orchestrate.io";
 var conf = require('./settings.json');
 var info = require('./package.json');
 var router;
-var pm = require('./lib/data-handlers/post-master.js');
+var pm = require('post-master');
 // var pp = require('./lib/passport/passportControls.js');
 var pages = path.join(__dirname, 'lib/routes/views/');
 
 var db = dbConnection(conf.defaultDatabase.key);
-var handler = {};
+var handler = 0;
 
 exports.rootAddress = conf.loginAdress;
+exports.dbController = handler;
 
 exports.build = function (app, options) {
     var defer = q.defer();
@@ -71,7 +72,7 @@ exports.build = function (app, options) {
 }
 
 exports.render = function (page, req, res, opt) {
-    if (handler == {}) {
+    if (handler == 0) {
         res.render(page, opt)
     } else {
         pm.getCMSElements(handler)
