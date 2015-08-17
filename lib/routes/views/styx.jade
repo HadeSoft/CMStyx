@@ -16,7 +16,7 @@ each val, index in managedElements
             //- -delete headers[index];}
     h3 #{stxValues.title}
     each val, index in element
-        form(action='./modify/update/' + stxValues.title + '/' + element[index].name enctype='multipart/form-data' method='post')
+        form(action='../modify/update/' + stxValues.title + '/' + element[index].name enctype='multipart/form-data' method='post')
             table
                 -if (index == 0)
                     tr
@@ -34,11 +34,11 @@ each val, index in managedElements
                                     input(type=inpType name=header value=element[index][header])
                     
                     td
-                        a(href='./modify/remove?element=' + stxValues.title + '&target=' + element[index].name) X
+                        a(href='../modify/remove?element=' + stxValues.title + '&target=' + element[index].name) X
                     td
                         input(type='submit' value='Y')
                     
-    form(action='./modify/add/' + stxValues.title enctype='multipart/form-data' method='post')
+    form(action='../modify/add/' + stxValues.title enctype='multipart/form-data' method='post')
         table
             tr
                 each val, pos in headers
