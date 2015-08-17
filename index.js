@@ -46,7 +46,6 @@ exports.build = function (app, options) {
                 bcrypt.genSalt(13, function (err, salt){
                     bcrypt.hash(password, salt, function (err, hash){
                         conf.adminPassword = hash;
-                        setup.save(conf);
                     });
                 });
             }
@@ -54,6 +53,7 @@ exports.build = function (app, options) {
             conf.defaultDatabase.location = req.body.location || fallback;
 
             setup.save(conf);
+            res.redirect('/');
             exports.build(app, options);
         });
 
@@ -76,7 +76,7 @@ exports.render = function (page, req, res, opt) {
     if (handler == 0) {
         res.render(page, opt)
     } else {
-        pm.getCMSElements()
+        pm.getCMSElements(handler)
         .then(function (data){
             console.log('STYX DATA : ');
             var elements = Object.getOwnPropertyNames(data);
