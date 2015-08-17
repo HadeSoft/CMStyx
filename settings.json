@@ -2,6 +2,7 @@
     "websiteName": "WEBSITE1",
     "loginAdress": "/admin",
     "adminPassword": "CHANGEME",
+    "superSecret": "CHANGEME",
     "defaultDatabase": {
         "key": "CHANGEME",
         "location": "CHANGEME",
