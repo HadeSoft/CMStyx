@@ -1,3 +1,4 @@
 # CMStyx
-## Not currently working. Getting close to fixed, maybe?
-## Ill write full documentaion when it is functional.
+## THIS CURRENT VERSION SEEMS TO BE STABLE
+## FEEL FREE TO TRY AND WORK IT OUT DOCUMENTATION WILL BE UP LATER TODAY
+-vm
