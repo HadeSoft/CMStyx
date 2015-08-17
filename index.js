@@ -63,7 +63,7 @@ exports.build = function (app, options) {
             console.log("CMSTYX ACTION : Running");
             handler = res;
             console.log(handler);
-            router = require('./lib/routes/router.js');
+            router = require('./lib/routes/router.js')(dbController);
             defer.resolve(router);
         });
     }
@@ -75,7 +75,7 @@ exports.render = function (page, req, res, opt) {
     if (handler == 0) {
         res.render(page, opt)
     } else {
-        pm.getCMSElements(handler)
+        pm.getCMSElements()
         .then(function (data){
             console.log('STYX DATA : ');
             var elements = Object.getOwnPropertyNames(data);
