@@ -36,7 +36,7 @@ exports.build = function (app, options) {
             res.render(pages + 'wake');
         })
 
-        router.post(conf.loginAdress + '/setup', function (req, res){
+        router.post('/setup', function (req, res){
             var fallback = "CHANGEME";
 
             conf.websiteName = req.body.title || conf.websiteName;
