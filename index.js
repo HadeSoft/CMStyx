@@ -27,6 +27,7 @@ exports.build = function (app, options) {
     }));
 
     if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
+        console.log("STYX ALERT : Change settings in settings.json or on '/'");
         router = require('express').Router();
         var setup = require('./lib/setup/establish.js');
         // setup.initial();
@@ -60,6 +61,7 @@ exports.build = function (app, options) {
         .then(function (res){
             console.log("CMSTYX ACTION : Running");
             handler = res;
+            console.log(handler);
             router = require('./lib/routes/router.js');
             defer.resolve(router);
         });
@@ -69,19 +71,23 @@ exports.build = function (app, options) {
 }
 
 exports.render = function (page, req, res, opt) {
-    pm.getCMSElements(handler)
-    .then(function (data){
-        console.log('STYX DATA : ');
-        var elements = Object.getOwnPropertyNames(data);
-        for (each in elements) {
-            var element = elements[each];
-            opt['stx_' + element] = data[element];
-        }
-        res.render(page, opt);
-    })
-    .fail(function (err){
-        console.log(err);
-    });
+    if (handler == {}) {
+        res.render(page, opt)
+    } else {
+        pm.getCMSElements(handler)
+        .then(function (data){
+            console.log('STYX DATA : ');
+            var elements = Object.getOwnPropertyNames(data);
+            for (each in elements) {
+                var element = elements[each];
+                opt['stx_' + element] = data[element];
+            }
+            res.render(page, opt);
+        })
+        .fail(function (err){
+            console.log(err);
+        });
+    }
 }
 
 function SetupCMS (app){
