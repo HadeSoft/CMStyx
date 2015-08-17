@@ -42,19 +42,18 @@ exports.build = function (app, options) {
             conf.websiteName = req.body.title || conf.websiteName;
             conf.loginAdress = req.body.root || conf.loginAdress;
             var password = req.body.password || fallback;
+            conf.defaultDatabase.key = req.body.apiKey || fallback;
+            conf.defaultDatabase.location = req.body.location || fallback;
             if (password != fallback) {
                 bcrypt.genSalt(13, function (err, salt){
                     bcrypt.hash(password, salt, function (err, hash){
                         conf.adminPassword = hash;
+                        setup.save(conf);
+                        res.redirect('/');
+                        exports.build(app, options);
                     });
                 });
             }
-            conf.defaultDatabase.key = req.body.apiKey || fallback;
-            conf.defaultDatabase.location = req.body.location || fallback;
-
-            setup.save(conf);
-            res.redirect('/');
-            exports.build(app, options);
         });
 
         defer.resolve(router);
