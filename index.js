@@ -10,7 +10,7 @@ dbConnection.ApiEndPoint = "api.ctl-gb3-a.orchestrate.io";
 var conf = require('./settings.json');
 var info = require('./package.json');
 var router;
-var pm = require('post-master');
+var pm = require('./lib/data-handlers/post-master');
 // var pp = require('./lib/passport/passportControls.js');
 var pages = path.join(__dirname, 'lib/routes/views/');
 
@@ -28,7 +28,7 @@ exports.build = function (app, options) {
     }));
 
     if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
-        console.log("STYX ALERT : Change settings in settings.json or on '/'");
+        console.log("STYX ALERT : Change settings in settings.json or on '" + conf.loginAdress + "'");
         router = require('express').Router();
         var setup = require('./lib/setup/establish.js');
         // setup.initial();
@@ -54,6 +54,7 @@ exports.build = function (app, options) {
             conf.defaultDatabase.location = req.body.location || fallback;
 
             setup.save(conf);
+            exports.build(app, options);
         });
 
         defer.resolve(router);
@@ -62,8 +63,8 @@ exports.build = function (app, options) {
         .then(function (res){
             console.log("CMSTYX ACTION : Running");
             handler = res;
-            console.log(handler);
-            router = require('./lib/routes/router.js')(dbController);
+            router = require('./lib/routes/router.js');
+            router.database(handler);
             defer.resolve(router);
         });
     }
