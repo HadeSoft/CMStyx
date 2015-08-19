@@ -19,6 +19,8 @@ This package is still in development.
 *CMStyx currently only supports orchestrate databases*
 The current version is functional on [hadesoft](http://www.hadesoft.io). If you are having any problems getting it running feel free to  open an issue on [github](https://github.com/HadeSoft/CMStyx/issues)
 
+- Changes to master object in database. (see backend step 3)
+
 ![CMStyx logo](http://www.hadesoft.io/images/cmstyx_Logo.png)
 ## Getting Started
 `var cms = require('cmstyx')`
@@ -58,6 +60,7 @@ router.get('/', function (req, res){
 
 The server is now ready to run.
 The first time CMStyx is run it will run in *setup* mode.
+
 1. By navigating to `www.yourwebsite.com/admin` you will be presented with a list of questions to fill out.
 2. Complete, at least, the stared questions and submit the form
 3. The server will log that the settings have been recreated
@@ -77,7 +80,7 @@ For CMStyx to work you will need a orchestrate database (free accounts are avail
 	and body :
 	```
 	{
-		"0" : ["name of element"]
+		"collection" : ["name of element"]
 	}
 	```
 4. Now you can create the content for your element in the same collection.
@@ -85,18 +88,31 @@ For CMStyx to work you will need a orchestrate database (free accounts are avail
 	```
 	"stx_element" : "name of element"
 	```
+	If you wish to have a specific input type for a property then name it: `typeofinput_nameofproperty` e.g.
+	```
+	file_picture //allows uploading of files to server
+	color_border //provides color picker in web UI
+	```
 5. Once one object has been added you can use the CMStyx web UI to append new ones to the element
 
-## Web UI
+### Web UI
+
 The Web UI will create a table for each element in the database
 From there you can add, remove and modify the properties of the element
 
 *The Web UI will allow you to add and remove files but they cannot currently be modified*
 
+Once a value has been changed the page needs to be refreshed before they change in the table.
+
+
 # API
+
 ## Basics
+
 #### `cms.build(app, options)`
+
 ###### defered by Q
+
 Initiates CMStyx, also loads into either *SETUP* or *RUNNING* mode.
 `app` = express()
 `options` = Anything you want doesn't do anything
@@ -110,11 +126,17 @@ get `/admin` for changing settings
 post `/setup` for catching changed settings
 
 issues
+
 ######404 after submitting new settings
+
 Restart server
+
 ######Stuck in *SETUP* mode
+
 Restart server
+
 ######Fails to remove/recreate settings
+
 Check if settings.json exists in node_modules/cmstyx
 If not create settings.json and fill with:
 ```json
@@ -136,6 +158,7 @@ If not create settings.json and fill with:
 ```
 
 ##### RUNNING mode
+
 Routes handled by lib/routes/router.js
 
 issues
@@ -144,6 +167,7 @@ This will be appended to as problems are reported
 
 
 #### `cms.render(page, req, res, opt)`
+
 If `post-master` has not been started yet (render run before build) then this will default to normal express rendering.
 Uses `pm.getCMSElements` to get element properties from database then appends them to `opt`
 
@@ -154,8 +178,10 @@ Uses `pm.getCMSElements` to get element properties from database then appends th
 
 
 #### `cms.rootAddress`
+
 Returns the defined root the web UI runs from.
 
 
 #### `cms.dbController`
+
 Returns the database handler used by `post-master`
