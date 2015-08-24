@@ -1,7 +1,7 @@
 {
     "name": "cmstyx",
     "version": "0.4.2",
-    "devVersion": "BII",
+    "devVersion": "BVI",
     "description": "Barebones Content Management System",
     "main": "index.js",
     "scripts": {
@@ -17,7 +17,9 @@
         "management",
         "hadesoft",
         "modify",
-        "dynamic"
+        "dynamic",
+        "styx",
+        "ui"
     ],
     "dependencies": {
         "q": "1.4.1",

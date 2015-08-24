@@ -1,3 +1,4 @@
+var express = require('express');
 var q = require('q');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -26,6 +27,11 @@ exports.build = function (app, options) {
     app.use(bodyParser.urlencoded({
         extended: false
     }));
+
+    var extrasPath = path.join(__dirname, 'lib/routes/public');
+    console.log(extrasPath);
+
+    app.use(express.static(path.join(__dirname, 'lib/routes/public')));
 
     if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
         console.log("STYX ALERT : Change settings in settings.json or on '" + conf.loginAdress + "'");

@@ -1,61 +1,115 @@
-h1 welcome to CMStyx for #{title}
--var eleCount = managedElements.length || 0
--var i = 0
-each val, index in managedElements
-    -var element = managedElements[index];
-    -var headers = Object.getOwnPropertyNames(element[0]);
-    -var stxValues = {'title' : element[0].stx_element};
-    -var displayHeaders = [];
-    each val, index in headers
-        -var test = val.split('_');
-        -var header = val;
-        -if(test.length > 1) header = test[1];
-        -displayHeaders.push(header);
-        -if (test[0] == 'stx' || test[0] == 'file') {
-            -delete displayHeaders[index];}
-            //- -delete headers[index];}
-    h3 #{stxValues.title}
-    each val, index in element
-        form(action='./modify/update/' + stxValues.title + '/' + element[index].name enctype='multipart/form-data' method='post')
-            table
-                -if (index == 0)
+extends template
+
+block pageSpecifics
+    script(type='text/javascript' src='/javascripts/cmspagecontroller.js')
+
+block cmsPage
+    -var eleCount = managedElements.length || 0
+    -var i = 0
+    -var element
+    -var headers
+    -var stxValues
+    -var displayHeaders
+
+    #control-panel
+        a#indicator(href='javascript:void(0)' onclick='ExpandPanel()')
+            h2 <
+        #expander
+            a.side-link(href='javascript:void(0)' onclick='ExpandPanel()')
+            nav#options
+                ul
+                    li#control-panel-add-control
+                        a(href='javascript:void(0)' onclick='SwitchToTitleInput("#control-panel-add-control")')
+                            h3 +
+                    li
+                        a(href='#') 2
+                    li
+                        a(href='#') 3
+                    li
+                        a(href='#') 4
+                    li
+                        a(href='#') 5
+                    li
+                        a(href='#') 6
+                    li
+                        a(href='#') 7
+
+    ul#element-nav
+        script(type='text/javascript').
+            var j = !{JSON.stringify(managedElements)};
+            CurrentElements(j);
+        if managedElements == "empty"
+            each val, index in managedElements
+                -element = managedElements[index];
+                -headers = Object.getOwnPropertyNames(element[0]);
+                -stxValues = {'title' : element[0].stx_element};
+                -displayHeaders = [];
+                each val, index in headers
+                    -var test = val.split('_');
+                    -var header = val;
+                    -if(test.length > 1) header = test[1];
+                    -displayHeaders.push(header);
+                    -if (test[0] == 'stx' || test[0] == 'file') {
+                        -delete displayHeaders[index];}
+                        //- -delete headers[index];}
+                li
+                    a(href='#element-' + stxValues.title)
+                        h3 #{stxValues.title}
+        li#nav-add-control
+            a(href='javascript:void(0)' onclick='SwitchToTitleInput("#nav-add-control")')
+                h3 +
+
+    section#elements-holder
+        if managedElements == "empty"
+            each val, index in managedElements
+                -element = managedElements[index];
+                article.element(id='element-' + stxValues.title)
+                    h2 #{managedElements[index][0].stx_element}
+                    each val, index in element
+                        form(action='./modify/update/' + stxValues.title + '/' + element[index].name enctype='multipart/form-data' method='post')
+                            table
+                                -if (index == 0)
+                                    tr
+                                        each value, pos in headers
+                                            if value
+                                                th #{displayHeaders[pos]}
+                                tr
+                                    each header in headers
+                                        if header
+                                            td
+                                                -var special = header.split('_');
+                                                -var inpType = 'text';
+                                                -if(special.length > 1) inpType = special[0];
+                                                -if (inpType != 'file' && inpType != 'stx')
+                                                    input(type=inpType name=header value=element[index][header])
+                                    
+                                    td.element-control
+                                        a(href='./modify/remove?element=' + stxValues.title + '&target=' + element[index].name) X
+                                    td.element-control
+                                        input(type='submit' value='Y')
+                    
+            form.appendor(action='./modify/add/' + stxValues.title enctype='multipart/form-data' method='post')
+                table
                     tr
-                        each value, pos in headers
-                            if value
-                                th #{displayHeaders[pos]}
-                tr
-                    each header in headers
-                        if header
-                            td
-                                -var special = header.split('_');
+                        each val, pos in headers
+                            if val
+                                -var special = val.split('_');
                                 -var inpType = 'text';
                                 -if(special.length > 1) inpType = special[0];
-                                -if (inpType != 'file' && inpType != 'stx')
-                                    input(type=inpType name=header value=element[index][header])
-                    
-                    td
-                        a(href='./modify/remove?element=' + stxValues.title + '&target=' + element[index].name) X
-                    td
-                        input(type='submit' value='Y')
-                    
-    form(action='./modify/add/' + stxValues.title enctype='multipart/form-data' method='post')
-        table
-            tr
-                each val, pos in headers
-                    if val
-                        -var special = val.split('_');
-                        -var inpType = 'text';
-                        -if(special.length > 1) inpType = special[0];
-                        -if (inpType != 'stx')
-                            th #{headers[pos]}
-            tr
-                each val in headers
-                    if val
+                                -if (inpType != 'stx')
+                                    th #{headers[pos]}
+                    tr
+                        each val in headers
+                            if val
+                                td
+                                    -var special = val.split('_');
+                                    -var inpType = 'text';
+                                    -if(special.length > 1) inpType = special[0];
+                                    -if (inpType != 'stx')
+                                        input(type=inpType name=val)
                         td
-                            -var special = val.split('_');
-                            -var inpType = 'text';
-                            -if(special.length > 1) inpType = special[0];
-                            -if (inpType != 'stx')
-                                input(type=inpType name=val)
-                td
-                    input(type='submit' value='+')
+                            input(type='submit' value='+')
+        else
+            article#guide
+                h1 Add Your First Element
+                h2 Start by clicking the '+'
