@@ -185,3 +185,30 @@ Returns the defined root the web UI runs from.
 #### `cms.dbController`
 
 Returns the database handler used by `post-master`
+
+##Database
+
+CMStyx uses one collection in the database
+The master object holds an array of all of the elements as well as the default values
+
+```json
+{
+	'collection' : [elementTitle, elementTitle],
+	'0' : {
+		'prop1' : 'default1',
+		'prop2' : 'default2',
+		'_fresh' : boolean,
+		'_name' : ref to 'collection'
+	}
+}
+```
+
+Each time a new record is added to an element a new object is created
+
+```json
+{
+	'prop1' : 'val1',
+	'prop2' : 'val2',
+	'stx_element' : '_name'
+}
+```

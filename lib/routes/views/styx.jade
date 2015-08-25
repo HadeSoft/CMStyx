@@ -6,10 +6,13 @@ block pageSpecifics
 block cmsPage
     -var eleCount = managedElements.length || 0
     -var i = 0
-    -var element
     -var headers
     -var stxValues
     -var displayHeaders
+    script(type='text/javascript').
+        var j = !{JSON.stringify(managedElements)};
+        console.log(j);
+        CurrentElements(j);
 
     #control-panel
         a#indicator(href='javascript:void(0)' onclick='ExpandPanel()')
@@ -35,23 +38,24 @@ block cmsPage
                         a(href='#') 7
 
     ul#element-nav
-        script(type='text/javascript').
-            var j = !{JSON.stringify(managedElements)};
-            CurrentElements(j);
-        if managedElements == "empty"
+        if managedElements != 0
             each val, index in managedElements
-                -element = managedElements[index];
-                -headers = Object.getOwnPropertyNames(element[0]);
-                -stxValues = {'title' : element[0].stx_element};
+                -var element = managedElements[index];
+                if element.stx_empty
+                    -headers = Object.getOwnPropertyNames(element);
+                    -stxValues = {'title' : element.stx_element};
+                else
+                    -headers = Object.getOwnPropertyNames(element[0]);
+                    -stxValues = {'title' : element[0].stx_element};
                 -displayHeaders = [];
                 each val, index in headers
                     -var test = val.split('_');
                     -var header = val;
                     -if(test.length > 1) header = test[1];
                     -displayHeaders.push(header);
-                    -if (test[0] == 'stx' || test[0] == 'file') {
-                        -delete displayHeaders[index];}
-                        //- -delete headers[index];}
+                    -if (test[0] == 'stx') {
+                        -delete displayHeaders[index];
+                        -delete headers[index];}
                 li
                     a(href='#element-' + stxValues.title)
                         h3 #{stxValues.title}
@@ -60,33 +64,34 @@ block cmsPage
                 h3 +
 
     section#elements-holder
-        if managedElements == "empty"
+        if managedElements != 0
             each val, index in managedElements
-                -element = managedElements[index];
+                -var element = managedElements[index];
                 article.element(id='element-' + stxValues.title)
-                    h2 #{managedElements[index][0].stx_element}
-                    each val, index in element
-                        form(action='./modify/update/' + stxValues.title + '/' + element[index].name enctype='multipart/form-data' method='post')
-                            table
-                                -if (index == 0)
+                    h2 #{stxValues.title}
+                    if element.stx_element == false
+                        each val, index in element
+                            form(action='./modify/update/' + stxValues.title + '/' + element[index].name enctype='multipart/form-data' method='post')
+                                table
+                                    -if (index == 0)
+                                        tr
+                                            each value, pos in headers
+                                                if value
+                                                    th #{displayHeaders[pos]}
                                     tr
-                                        each value, pos in headers
-                                            if value
-                                                th #{displayHeaders[pos]}
-                                tr
-                                    each header in headers
-                                        if header
-                                            td
-                                                -var special = header.split('_');
-                                                -var inpType = 'text';
-                                                -if(special.length > 1) inpType = special[0];
-                                                -if (inpType != 'file' && inpType != 'stx')
-                                                    input(type=inpType name=header value=element[index][header])
-                                    
-                                    td.element-control
-                                        a(href='./modify/remove?element=' + stxValues.title + '&target=' + element[index].name) X
-                                    td.element-control
-                                        input(type='submit' value='Y')
+                                        each header in headers
+                                            if header
+                                                td
+                                                    -var special = header.split('_');
+                                                    -var inpType = 'text';
+                                                    -if(special.length > 1) inpType = special[0];
+                                                    -if (inpType != 'file' && inpType != 'stx')
+                                                        input(type=inpType name=header value=element[index][header])
+                                        
+                                        td.element-control
+                                            a(href='./modify/remove?element=' + stxValues.title + '&target=' + element[index].name) X
+                                        td.element-control
+                                            input(type='submit' value='Y')
                     
             form.appendor(action='./modify/add/' + stxValues.title enctype='multipart/form-data' method='post')
                 table
