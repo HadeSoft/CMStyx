@@ -43,7 +43,7 @@ block cmsPage
                 -var element = managedElements[index];
                 if element.stx_empty
                     -headers = Object.getOwnPropertyNames(element);
-                    -stxValues = {'title' : element.stx_element};
+                    -stxValues = {'title' : element.stx_element, 'position' : element.stx_position};
                 else
                     -headers = Object.getOwnPropertyNames(element[0]);
                     -stxValues = {'title' : element[0].stx_element};
@@ -93,7 +93,7 @@ block cmsPage
                                         td.element-control
                                             input(type='submit' value='Y')
                     
-            form.appendor(action='./modify/add/' + stxValues.title enctype='multipart/form-data' method='post')
+            form.appendor(action='./modify/add/' + stxValues.title + '/' + stxValues.position  enctype='multipart/form-data' method='post')
                 table
                     tr
                         each val, pos in headers
