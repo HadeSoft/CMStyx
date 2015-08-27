@@ -9,6 +9,7 @@ block cmsPage
     -var headers
     -var stxValues
     -var displayHeaders
+    -var empty
     script(type='text/javascript').
         var j = !{JSON.stringify(managedElements)};
         console.log(j);
@@ -41,7 +42,8 @@ block cmsPage
         if managedElements != 0
             each val, index in managedElements
                 -var element = managedElements[index];
-                if element.stx_empty
+                -empty = element.stx_empty || element[0].stx_empty;
+                if empty
                     -headers = Object.getOwnPropertyNames(element);
                     -stxValues = {'title' : element.stx_element, 'position' : element.stx_position};
                 else
@@ -69,24 +71,29 @@ block cmsPage
                 -var element = managedElements[index];
                 article.element(id='element-' + stxValues.title)
                     h2 #{stxValues.title}
-                    if element.stx_element == false
+                    -empty = element.stx_empty || element[0].stx_empty;
+                    if !empty
                         each val, index in element
                             form(action='./modify/update/' + stxValues.title + '/' + element[index].name enctype='multipart/form-data' method='post')
                                 table
                                     -if (index == 0)
                                         tr
-                                            each value, pos in headers
-                                                if value
-                                                    th #{displayHeaders[pos]}
-                                    tr
-                                        each header in headers
-                                            if header
-                                                td
+                                            each header, pos in headers
+                                                if header
                                                     -var special = header.split('_');
                                                     -var inpType = 'text';
                                                     -if(special.length > 1) inpType = special[0];
                                                     -if (inpType != 'file' && inpType != 'stx')
-                                                        input(type=inpType name=header value=element[index][header])
+                                                        th #{displayHeaders[pos]}
+                                    tr
+                                        each header in headers
+                                            if header
+                                                -var special = header.split('_');
+                                                -var inpType = 'text';
+                                                -if(special.length > 1) inpType = special[0];
+                                                -if (inpType != 'file' && inpType != 'stx')
+                                                    td
+                                                        input(type=inpType name=header placeholder=element[index][header])
                                         
                                         td.element-control
                                             a(href='./modify/remove?element=' + stxValues.title + '&target=' + element[index].name) X
