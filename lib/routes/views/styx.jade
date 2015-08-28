@@ -48,7 +48,7 @@ block cmsPage
                     -stxValues = {'title' : element.stx_element, 'position' : element.stx_position};
                 else
                     -headers = Object.getOwnPropertyNames(element[0]);
-                    -stxValues = {'title' : element[0].stx_element};
+                    -stxValues = {'title' : element[0].stx_element, 'position' : element[0].stx_position};
                 -displayHeaders = [];
                 each val, index in headers
                     -var test = val.split('_');
@@ -74,7 +74,7 @@ block cmsPage
                     -empty = element.stx_empty || element[0].stx_empty;
                     if !empty
                         each val, index in element
-                            form(action='./modify/update/' + stxValues.title + '/' + element[index].name enctype='multipart/form-data' method='post')
+                            form(action='./modify/update/' + element[index].stx_unique enctype='multipart/form-data' method='post')
                                 table
                                     -if (index == 0)
                                         tr
