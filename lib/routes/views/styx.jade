@@ -70,7 +70,8 @@ block cmsPage
             each val, index in managedElements
                 -var element = managedElements[index];
                 article.element(id='element-' + stxValues.title)
-                    h2 #{stxValues.title}
+                    h2#element-header #{stxValues.title}
+                        a#remove-element(href='./modify/delete/' + stxValues.title) x
                     -empty = element.stx_empty || element[0].stx_empty;
                     if !empty
                         each val, index in element
