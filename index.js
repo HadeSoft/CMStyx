@@ -83,11 +83,14 @@ exports.render = function (page, req, res, opt) {
     } else {
         pm.getCMSElements(handler)
         .then(function (data){
-            var elements = Object.getOwnPropertyNames(data);
-            for (each in elements) {
-                var element = elements[each];
-                opt['stx_' + element] = data[element];
+            if (data != 0) {
+                var elements = Object.getOwnPropertyNames(data);
+                for (each in elements) {
+                    var element = elements[each];
+                    opt['stx_' + element] = data[element];
+                }
             }
+
             res.render(page, opt);
         })
         .fail(function (err){

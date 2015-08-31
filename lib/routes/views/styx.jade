@@ -91,10 +91,13 @@ block cmsPage
                                             if header
                                                 -var special = header.split('_');
                                                 -var inpType = 'text';
-                                                -if(special.length > 1) inpType = special[0];
+                                                -var inpVal = "";
+                                                -if(special.length > 1)
+                                                    -inpType = special[0];
+                                                    -inpVal = element[index][header];
                                                 -if (inpType != 'file' && inpType != 'stx')
                                                     td
-                                                        input(type=inpType name=header placeholder=element[index][header])
+                                                        input(type=inpType name=header placeholder=element[index][header] value=inpVal)
                                         
                                         td.element-control
                                             a(href='./modify/remove?element=' + stxValues.title + '&target=' + element[index].name) X
