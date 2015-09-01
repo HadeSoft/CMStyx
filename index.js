@@ -33,7 +33,7 @@ exports.build = function (app, options) {
 
     app.use(express.static(path.join(__dirname, 'lib/routes/public')));
 
-    if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME") {
+    if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME" || conf.superSecret == "CHANGEME") {
         console.log("STYX ALERT : Change settings in settings.json or on '" + conf.loginAdress + "'");
         router = require('express').Router();
         var setup = require('./lib/setup/establish.js');
@@ -45,11 +45,15 @@ exports.build = function (app, options) {
         router.post('/setup', function (req, res){
             var fallback = "CHANGEME";
 
+            //OPTIONAL
             conf.websiteName = req.body.title || conf.websiteName;
             conf.loginAdress = req.body.root || conf.loginAdress;
+            //REQUIRED
             var password = req.body.password || fallback;
             conf.defaultDatabase.key = req.body.apiKey || fallback;
             conf.defaultDatabase.location = req.body.location || fallback;
+            conf.superSecret = req.body.secret || fallback;
+
             if (password != fallback) {
                 bcrypt.genSalt(13, function (err, salt){
                     bcrypt.hash(password, salt, function (err, hash){

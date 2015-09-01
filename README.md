@@ -1,214 +1,130 @@
-# CMStyx
-## About
-CMStyx is a content management system allowing web-admins to control page content from a web ui. This saves time rewriting jade and gives the ability to create dynamic elements interfacing with a database.
+![CMStyx Logo](http://www.hadesoft.io/images/cmstyx_Logo.png)
 
-## How?
-CMStyx sits between the user defined routes and the res.render calls.
-Before the page is sent to the user CMStyx grabs the relevant data from your database and
-provides it to the jade template.
-The object can then be used how ever you wish to fill in your web page.
+Flexible Content Mangement System to help you keep your site upto date with ease.
 
-CMStyx also provides a web UI for admins in order to modify cms-elements on the fly.
+![npm version](https://badge.fury.io/js/cmstyx.svg)
+![npm dependencies](https://david-dm.org/HadeSoft/CMStyx.svg)
+![github issues](https://img.shields.io/github/issues/HadeSoft/CMStyx.svg)
 
-### TODO:
-- Add new cms-elements from web UI
-- User Interface update
+## Installation
 
-## Update
-This package is still in development.
-*CMStyx currently only supports orchestrate databases*
-The current version is functional on [hadesoft](http://www.hadesoft.io). If you are having any problems getting it running feel free to  open an issue on [github](https://github.com/HadeSoft/CMStyx/issues)
+```bash
+$ npm install cmstyx
+```
 
-- Changes to master object in database. (see backend step 3)
+## Update Log
 
-![CMStyx logo](http://www.hadesoft.io/images/cmstyx_Logo.png)
-## Getting Started
-`var cms = require('cmstyx')`
+#### This is Beta Version 1, CMStyx is still under development and I will continue to add features and fix bugs
 
-CMStyx needs to finish building before routes can be passed to the app/server.
+#### Please report any issues to the [github page](https://github.com/HadeSoft/CMStyx/issues)
 
-```javascript
+This newest update has completly changed how the cms database is handled and is therefore not compatible with previous versions.
+Before using this version I suggest that the current 'web-elements' collection is deleted as it could interfere with the new version.
+
+### Patch Notes
+
+Updates from Aug 19 V.II - Sep 1 V.XIV
+
+  * Web UI for CMS controller
+  * Ability to add element through the W.UI
+  * Major database re-work
+  * Modify current records through the W.UI
+  * Elements can be removed through the W.UI
+  * Login session tracked using cookies and secrets
+  * Web UI for CMS login
+
+## Quick start
+
+CMStyx sits between the routes and the page render calls.
+In order to setup the CMS it must finish building before routes are called.
+
+##### App/Server.js
+
+```js
+var cms = require('cmstyx');
+
+//Works off users express app
+var express = require('express');
 var app = express();
-
-/* MIDDLEWARE */
 
 cms.build(app)
 .then(function (cmsRoute){
+
+	//Routes are handled after cmstyx has been initiated
 	app.use('/', router);
+
+	//Choose where the admin panel is accessed from e.g. '/admin'
+	app.use('/admin', cmsRoute);
+	//OR
+	//Use the route from the settings.json
 	app.use(cms.rootAddress, cmsRoute);
 
-	app.listen(port);
-	module.exports = app;
-});
-```
-
-In the user defined router file replace the express render:
-```javascript
-router.get('/', function (req, res){
-	res.render('page', object);
-});
-```
-
-With the CMS intercept:
-```javascript
-var cms = require('cmstyx');
-
-router.get('/', function (req, res){
-	cms.render('page', req, res, object);
+	app.listen(3000);
 })
 ```
 
-The server is now ready to run.
-The first time CMStyx is run it will run in *setup* mode.
+CMStyx will need to grab information from the database before the page is rendered.
+To do this you will need to modify your routing functions:
 
-1. By navigating to `www.yourwebsite.com/admin` you will be presented with a list of questions to fill out.
-2. Complete, at least, the stared questions and submit the form
-3. The server will log that the settings have been recreated
-4. Restart the server. If you completed all the stared questions CMStyx will start in *Running* mode. (If you missed any questions it will start in *setup* mode again).
-5. Your website is now up and running
+##### Router.js
 
-## Creating an element
-#### This is a temporary solution until the web UI is finished
+```js
+var router = require('express').Router();
+var cms = require('cmstyx');
 
-### Backend
-For CMStyx to work you will need a orchestrate database (free accounts are availble)
+router.get('/', function (req, res){
+	var obj = { User Varibles to pass to page };
 
-1. Log in to the orchestrate dashboard,
-2. Create a new collection named: *web-elements*,
-3. Insert a *control* object. This will contain an array of all the dynamic elements you add.
-	It needs to have the key : *master*
-	and body :
-	```
-	{
-		"collection" : ["name of element"]
-	}
-	```
-4. Now you can create the content for your element in the same collection.
-	The object can contain as many properties as you wish, but it must contain the property
-	```
-	"stx_element" : "name of element"
-	```
-	If you wish to have a specific input type for a property then name it: `typeofinput_nameofproperty` e.g.
-	```
-	file_picture //allows uploading of files to server
-	color_border //provides color picker in web UI
-	```
-5. Once one object has been added you can use the CMStyx web UI to append new ones to the element
+	cms.render(page, req, res, obj);	
+})
+```
 
-### Web UI
+The first time that CMStyx is run it will be in setup mode.
+When visiting your choosen route you will be shown a settings form.
 
-The Web UI will create a table for each element in the database
-From there you can add, remove and modify the properties of the element
+Once the form is submitted restart the server and CMStyx will run as normal, if all required settings have been changed.
 
-*The Web UI will allow you to add and remove files but they cannot currently be modified*
+### CMStyx Control Panel
 
-Once a value has been changed the page needs to be refreshed before they change in the table.
+By logging in to the CMS via your choosen route and password you will be redirected to the control panel.
+From there you can create, remove and edit elements/records.
+By starting a property name with an input type then an underscore: `color_picture`. The property will have the required input type in the editor.
 
+###### *However files can not be modified once submitted, currently, they can only be added or removed and will not appear in the editor*
 
-# API
+### Displaying elements in pages
 
-## Basics
-
-#### `cms.build(app, options)`
-
-###### defered by Q
-
-Initiates CMStyx, also loads into either *SETUP* or *RUNNING* mode.
-`app` = express()
-`options` = Anything you want doesn't do anything
-
-During the build, if *RUNNING*, `post-master` is also started which connects to your database.
-Q will resolve with a router object independent on which mode CMStyx is in.
-
-##### SETUP mode
-Routes handled:
-get `/admin` for changing settings
-post `/setup` for catching changed settings
-
-issues
-
-######404 after submitting new settings
-
-Restart server
-
-######Stuck in *SETUP* mode
-
-Restart server
-
-######Fails to remove/recreate settings
-
-Check if settings.json exists in node_modules/cmstyx
-If not create settings.json and fill with:
-```json
-{
-    "websiteName": "WEBSITE1",
-    "loginAdress": "/admin",
-    "adminPassword": "CHANGEME",
-    "superSecret": "CHANGEME",
-    "defaultDatabase": {
-        "key": "CHANGEME",
-        "location": "CHANGEME",
-        "type": "orchestrate",
-        "dependencies": [
-            "orchestrate"
-        ]
-    },
-    "customDatabase": 0
+When `cms.render()` is called it will grab elements from the database and append them to your current object.
+The elements will be named `stx_YourElementName`. The element object will contain all of the records and a few stx properties e.g.
+```js
+stx_YourElementName : {
+	[ { property1 : val1,
+		property2 : val2,
+		...       : ...,
+		stx_element : 'YourElementName',
+		stx_empty : false,
+		stx_unique : 'Object Key In Database' },
+	  { record2 },
+	  { ... } ]
 }
 ```
 
-##### RUNNING mode
-
-Routes handled by lib/routes/router.js
-
-issues
-All modules are active from this point on
-This will be appended to as problems are reported
-
-
-#### `cms.render(page, req, res, opt)`
-
-If `post-master` has not been started yet (render run before build) then this will default to normal express rendering.
-Uses `pm.getCMSElements` to get element properties from database then appends them to `opt`
-
-`page` name of jade file to render
-`req` express request
-`res` express response
-`opt` varibles object to add to template
-
-
-#### `cms.rootAddress`
-
-Returns the defined root the web UI runs from.
-
-
-#### `cms.dbController`
-
-Returns the database handler used by `post-master`
-
-##Database
-
-CMStyx uses one collection in the database
-The master object holds an array of all of the elements as well as the default values
-
-```json
-{
-	'collection' : [elementTitle, elementTitle],
-	'0' : {
-		'prop1' : 'default1',
-		'prop2' : 'default2',
-		'_fresh' : boolean,
-		'_name' : ref to 'collection'
-	}
-}
+With this you can loop through the object and display the information with Jade e.g.
+```jade
+if stx_ELEMENT
+	-var i = stx_ELEMENT.length;
+	-for(var c = 0; c < i; c++)
+		-var record = stx_ELEMENT[c];
+		h2 record.title
+		a(href=record.url) #{record.description}
 ```
 
-Each time a new record is added to an element a new object is created
+## Extras
 
-```json
-{
-	'prop1' : 'val1',
-	'prop2' : 'val2',
-	'stx_element' : '_name'
-}
-```
+Once `cms.build()` has been run you can access the url of the cms using:
+
+`var root = cms.rootAddress`
+
+The handler used to query the database can also be accessed using:
+
+`var handler = cms.dbController`
