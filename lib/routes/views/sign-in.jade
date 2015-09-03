@@ -1,4 +1,7 @@
-form(method='post' action=root + '/login')
-	h3 #{message}
-	input(type='password' name='password')
-	input(type='submit')
+extends template
+
+block cmsPage
+	form#login(method='post' action=root + '/login'  value='')
+		h3 #{message}
+		input(type='password' name='password')
+		input(type='submit' value='Login')

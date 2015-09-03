@@ -4,7 +4,17 @@ head
 	meta(charset="UTF-8")
 	title CMStyx - #{title}
 
+	link(rel='stylesheet' type='text/css' href='/stylesheets/sx-universal.css')
+
 	script(type='text/javascript' src='/javascripts/jquery-1.11.1.min.js')
+	block pageSpecifics
+		
 body
+	header#top-bar
+		h3
+			a(href='/') < #{title}
+		span#right-side
+			h3 CMStyx
+			img(src='/images/cmstyx_0_5_0.png')
 	block cmsPage
 	

@@ -1,0 +1,236 @@
+// out: ../public/stylesheets/sx-universal.css, sourcemap: true, compress: true
+
+body
+    background-color #34495E
+    font-family Arial, "Helvetica Neue", Helvetica, sans-serif
+    margin 0
+    padding 0
+
+h2
+    margin 0 0 10px 0
+
+h3
+    padding 0
+    margin 0
+    display inline
+
+a
+    text-decoration none
+    color white
+
+ul
+    padding 0
+    margin 0
+
+#top-bar
+    background-color #365778
+    box-shadow 0px 10px 10px 0px rgba(0, 0, 0, 0.5)
+    height 70px
+    position fixed
+    text-shadow 0 0 1px rgb(42, 59, 76)
+    width 100%
+    z-index 40
+    a
+        color rgb(42, 59, 76)
+        line-height 70px
+        padding-left 10px
+        // margin-top 10px
+        text-decoration none
+    #right-side
+        float right
+        vertical-align middle
+        h3
+            margin-top 10px
+            color rgb(42, 59, 76)
+            display block
+            float left
+            line-height 50px
+        img
+            float right
+            height 70px
+            width 70px
+
+#login
+    margin 0 auto
+    padding-top 200px
+    text-align center
+    width 600px
+    h3
+        font-size 2em
+        display block
+    input
+        border 0
+        height 40px
+        margin 0
+        padding 0
+        text-align center
+        width 100%
+
+#guide
+    color #293A4B
+    margin 0 auto
+    text-align center
+    // text-shadow 0 0 10px rgba(0, 0, 0, 0.3)
+    width 400px
+
+#element-nav
+    list-style none
+    margin 0 0 10px 0
+    padding 70px 0 0 0
+    position fixed
+    li
+        border-right 3px solid #365778
+        display inline
+        padding 10px 10px 5px 10px
+    a
+        display inline-block
+        padding-top 5px
+        &:hover h3
+            text-shadow 0 0 0 #000
+            opacity 0.3
+    h3
+        color #A7A37E
+        text-shadow 0 0 20px #000
+        transition all 0.4s
+        opacity 1
+
+#elements
+    padding-top 120px
+
+#remove-element
+    font-size 0.6em
+    padding-bottom 10px
+    // margin-left 50px
+
+#control-panel
+    float right
+    display block
+    // overflow hidden
+    padding-left 50px
+    position fixed
+    top 0
+    right 0
+    height 100%
+    transition width 2s
+    width 0
+    z-index 30
+    #expander
+        background-color #365778
+        box-shadow 00px 0 10px 1px #000
+        float right
+        height 100%
+        transition all 0.5s
+        width 0
+    &:hover #expander
+        width 50px
+    .side-link
+        display block
+        height 100%
+        position fixed
+        right 0
+        top 70px
+        width 50px
+    #indicator
+        border-style solid
+        border-width 0 50px 50px 0
+        border-color transparent
+        border-right-color #750002
+        color white
+        height 0
+        position fixed
+        right 0
+        top 70px
+        width 0
+        h2
+            padding-left 25px
+            margin-top 1px
+            color #A7A37E
+
+#options
+    float left
+    margin-top 150px
+    overflow hidden
+    width 100%
+    ul
+        list-style none
+        width 100%
+        li
+            background-color #F7F4F3
+            display block
+            height 50px
+            width 100%
+            padding 10px 0 0 50px
+            &:hover
+                border-left 10px solid #A7A37E
+                box-shadow inset 0 0 100px rgba(0, 0, 0, 0.4)
+                padding 10px 0 0 40px
+            a
+                display block
+                color #A7A37E
+                font-size 1em
+                height 100%
+                width 100%
+        li:nth-child(2n+0)
+            background-color #750002
+            &:hover
+                box-shadow inset 0 0 100px rgba(255, 255, 255, 0.3)
+
+.open-panel
+    background-color #365778
+    box-shadow 00px 0 10px 1px #000
+    width 300px !important
+    #expander
+        display none
+    .side-link
+        width 0 !important
+
+#elements-holder
+    padding-top 150px
+    .appendor
+        background-color #750002
+        box-shadow 0 0 15px -2px #000
+        color #A7A37E
+        padding 10px 0
+        width 100%
+        table
+            margin-left 30px
+
+.element
+    background-color #f7f4f3
+    padding 40px 0 40px 3%
+    width 97%
+    hr
+        border-color #365778
+    table, th, td
+        border-collapse collapse
+    tr
+        height 30px
+    table
+        margin-bottom 5px
+    input
+        margin-left 10px
+        background-color transparent
+        border-width 0
+        border-bottom 2px solid #000
+        border-style dotted
+    input[type='submit']
+        color #a7a37e
+        cursor pointer
+        font-size 1em
+        vertical-align middle
+    input[type='color'],
+    input[type='file'],
+    input[type='submit']
+        border-width 0
+    a
+        color #a7a37e
+        display inline
+        height 100%
+        // line-height 100%
+        width 100%
+        vertical-align middle
+        // padding-left 20px
+    .element-control
+        background-color #000
+        text-align center
+        width 30px
