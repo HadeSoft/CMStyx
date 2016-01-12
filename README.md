@@ -14,6 +14,8 @@ $ npm install cmstyx
 
 ## Update Log
 
+I was having issues working with bcrypt so I have changed to bcryptjs. This will have a slight impact on encryption performance, but should be easier to use.
+
 #### This is Beta Version 1, CMStyx is still under development and I will continue to add features and fix bugs
 
 #### Please report any issues to the [github page](https://github.com/HadeSoft/CMStyx/issues)
@@ -22,6 +24,11 @@ This newest update has completly changed how the cms database is handled and is 
 Before using this version I suggest that the current 'web-elements' collection is deleted as it could interfere with the new version.
 
 ### Patch Notes
+
+Update from 12 Jan 16 V.XXI
+
+  * Moved from bcrypt to bcryptjs
+  * Removed some console logs
 
 Updates from Aug 19 V.II - Sep 1 V.XIV
 
