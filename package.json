@@ -24,13 +24,14 @@
         "page"
     ],
     "dependencies": {
+		"express": "4.13.3",
         "q": "1.4.1",
-        "orchestrate": "0.4.6",
+        "orchestrate": "0.7.0",
         "body-parser": "1.13.3",
         "formidable": "1.0.17",
         "quickthumb": "0.0.11",
         "fs-extra": "0.23.1",
-        "bcrypt": "0.8.4"
+        "bcryptjs": "2.3.0"
     },
     "author": "VariousMilkshakes <vm@hadesoft.io> (http://www.hadesoft.io)",
     "license": "MIT",

@@ -2,45 +2,66 @@ var express = require('express');
 var q = require('q');
 var path = require('path');
 var bodyParser = require('body-parser');
-var bcrypt = require('bcrypt');
-// var session = require('express-session');
-// var passport = require('passport');
+var bcrypt = require('bcryptjs');
+
+
 var dbConnection = require('orchestrate');
 dbConnection.ApiEndPoint = "api.ctl-gb3-a.orchestrate.io";
 
+
 var conf = require('./settings.json');
 var info = require('./package.json');
+
 var router;
 var pm = require('./lib/data-handlers/post-master');
-// var pp = require('./lib/passport/passportControls.js');
+
+
 var pages = path.join(__dirname, 'lib/routes/views/');
 
+
 var db = dbConnection(conf.defaultDatabase.key);
+/**
+ * Holds the database handler if implemented
+ */
 var handler = 0;
+
 
 exports.rootAddress = conf.loginAdress;
 exports.dbController = handler;
 
+
 exports.build = function (app, options) {
+	
     var defer = q.defer();
+	
+	
     console.log("Running CMSTYX " + info.devVersion);
+	
     app.use(bodyParser.urlencoded({
         extended: false
     }));
-
+	
+	
     var extrasPath = path.join(__dirname, 'lib/routes/public');
-    console.log(extrasPath);
 
-    app.use(express.static(path.join(__dirname, 'lib/routes/public')));
+
+    app.use(express.static(extrasPath));
+
 
     if (conf.adminPassword == "CHANGEME" || conf.defaultDatabase.key == "CHANGEME" || conf.defaultDatabase.location == "CHANGEME" || conf.superSecret == "CHANGEME") {
+		
         console.log("STYX ALERT : Change settings in settings.json or on '" + conf.loginAdress + "'");
+		
         router = require('express').Router();
+		
         var setup = require('./lib/setup/establish.js');
+		
+		
         // setup.initial();
         router.get('/', function (req, res){
             res.render(pages + 'wake');
-        })
+        });
+
 
         router.post('/setup', function (req, res){
             var fallback = "CHANGEME";
@@ -66,11 +87,13 @@ exports.build = function (app, options) {
             }
         });
 
+
         defer.resolve(router);
+		
     } else {
         pm.connectTo()
         .then(function (res){
-            console.log("CMSTYX ACTION : Running");
+            console.log("CA~ Running");
             handler = res;
             router = require('./lib/routes/router.js');
             router.database(handler);
@@ -81,6 +104,9 @@ exports.build = function (app, options) {
     return defer.promise;
 }
 
+/**
+ * Handles all rendering requests over express
+ */
 exports.render = function (page, req, res, opt) {
     if (handler == 0) {
         res.render(page, opt)
